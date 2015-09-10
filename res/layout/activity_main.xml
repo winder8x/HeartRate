@@ -4,76 +4,60 @@
     android:layout_height="fill_parent"
     android:orientation="vertical" 
     >
+    
     <LinearLayout
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_weight="1"
-        >
-        <TextView
-            android:id="@+id/tv_listBluetooth"
-            android:text="第一行"
-            android:gravity="center"
-            android:textSize="24px"
-            android:background="#0066ff"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:onClick="tv_listBluetoothClick"
-            android:clickable="true"
-            />
-         <TextView
-            android:id="@+id/tv_listBluetoothStatus"
-            android:text="第二行"
-            android:gravity="center"
-            android:textSize="24px"
-            android:background="#ffcc00"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            />
-          <TextView
-            android:text="第三行"
-            android:gravity="center"
-            android:textSize="24px"
-            android:background="#33cc00"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            />
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="15dp"
         android:orientation="horizontal"
         android:layout_weight="1"
         >
+        <!-- 左边第一个View -->
           <TextView
-            android:text="第一列"
+            android:id="@+id/tv_listBluetoothStatus"
+            android:text="Start"
             android:gravity="center"
             android:textSize="24px"
             android:background="#33cc00"
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
             android:layout_weight="1"
+            android:clickable="true"
+            android:onClick="tv_listBluetoothClick"
             />
          <TextView
-            android:text="第二列"
+            android:id="@+id/tv_listBluetooth"
+            android:text="00"
             android:gravity="center"
-            android:textSize="24px"
+            android:textSize="92px"
             android:background="#ffcc00"
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
             android:layout_weight="1"
             />
           <TextView
-            android:text="第三列"
+            android:text="00"
             android:gravity="center"
             android:textSize="24px"
             android:background="#0066ff"
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
             android:layout_weight="1"
+            android:clickable="true"
+            android:onClick="tv_listTestRecordClick"
             />   
+    </LinearLayout>
+    <!-- 
+        android:layout_height="wrap_content"
+         -->
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="60dp"
+        android:orientation="vertical"
+        android:layout_weight="1"
+        >
+        <com.github.mikephil.charting.charts.LineChart
+        android:id="@+id/chart"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
     </LinearLayout>
 </LinearLayout>

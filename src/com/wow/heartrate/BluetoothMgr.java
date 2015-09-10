@@ -23,7 +23,7 @@ import android.content.Intent;
 
 public class BluetoothMgr{
 
-	// ×Ô¶¨Òå²âÊÔÏûÏ¢
+	// è‡ªå®šä¹‰æµ‹è¯•æ¶ˆæ¯
 	public static int REQUEST_ENABLE_BT = 1;
 	
 	public CallWriteMessage writeMessage;
@@ -46,7 +46,7 @@ public class BluetoothMgr{
 	}
 	
 	/**
-	 * »ñÈ¡À¶ÑÀÉè±¸
+	 * è·å–è“ç‰™è®¾å¤‡
 	 */
 	public HashMap<String,BluetoothDevice> optBluetooth() {
 		if (blueAdapter == null) {
@@ -64,7 +64,7 @@ public class BluetoothMgr{
 					BluetoothAdapter.ACTION_REQUEST_ENABLE);
 			// startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
 		}
-		// ²éÕÒÒÑ¾­Æ¥ÅäµÄÉè±¸
+		// æŸ¥æ‰¾å·²ç»åŒ¹é…çš„è®¾å¤‡
 		Set<BluetoothDevice> pairedDevices = blueAdapter.getBondedDevices();
 
 		// If there are paired devices
@@ -78,7 +78,7 @@ public class BluetoothMgr{
 			}
 
 		}
-		// Register the BroadcastReceiver ×¢²á²¢É¨ÃèÀ¶ÑÀ
+		// Register the BroadcastReceiver æ³¨å†Œå¹¶æ‰«æè“ç‰™
 		// IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
 		// registerReceiver(mReceiver, filter); // Don't forget to unregister
 		// during onDestroy
@@ -117,7 +117,7 @@ public class BluetoothMgr{
 		callback = cb;
 	}
 	/**
-	 * ·şÎñ¶ËÏß³Ì
+	 * æœåŠ¡ç«¯çº¿ç¨‹
 	 * 
 	 * @author gongjan
 	 * 
@@ -174,7 +174,7 @@ public class BluetoothMgr{
 
 	
 	/**
-	 * ¿Í»§¶ËÏß³Ì
+	 * å®¢æˆ·ç«¯çº¿ç¨‹
 	 * 
 	 * @author gongjan
 	 * 
@@ -294,7 +294,7 @@ public class BluetoothMgr{
 	}
 
 	/**
-	 * Á¬½Óºó½ÓÊÕ·¢ËÍÏûÏ¢µÄÏß³Ì
+	 * è¿æ¥åæ¥æ”¶å‘é€æ¶ˆæ¯çš„çº¿ç¨‹
 	 * @author gongjan
 	 *
 	 */

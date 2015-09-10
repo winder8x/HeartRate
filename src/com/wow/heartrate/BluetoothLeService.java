@@ -50,7 +50,7 @@ public class BluetoothLeService extends Service {
     public final static UUID UUID_HEART_RATE_MEASUREMENT =
             UUID.fromString(HEART_RATE_MEASUREMENT);
  
-    // BLE API¶¨ÒåµÄ¸÷¸ö»Øµ÷·½·¨.
+    // BLE APIå®šä¹‰çš„å„ä¸ªå›žè°ƒæ–¹æ³•.
     public final BluetoothGattCallback mGattCallback =
             new BluetoothGattCallback() {
         @Override
@@ -61,14 +61,14 @@ public class BluetoothLeService extends Service {
                 intentAction = ACTION_GATT_CONNECTED;
                 mConnectionState = STATE_CONNECTED;
                 broadcastUpdate(intentAction);
-                Log.i(TAG, "Á¬½ÓGATT·þÎñ.");
-                Log.i(TAG, "³¢ÊÔ¿ªÊ¼serviceËÑË÷:" +
+                Log.i(TAG, "è¿žæŽ¥GATTæœåŠ¡.");
+                Log.i(TAG, "å°è¯•å¼€å§‹serviceæœç´¢:" +
                         mBluetoothGatt.discoverServices());
  
             } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
                 intentAction = ACTION_GATT_DISCONNECTED;
                 mConnectionState = STATE_DISCONNECTED;
-                Log.i(TAG, "¶Ï¿ªGATT serverÁ¬½Ó.");
+                Log.i(TAG, "æ–­å¼€GATT serverè¿žæŽ¥.");
                 broadcastUpdate(intentAction);
             }
         }
@@ -116,8 +116,8 @@ public class BluetoothLeService extends Service {
     };
 //...
     /**
-     * µ±Ò»¸öÌØ¶¨µÄµÄ»Øµ÷·½·¨±»µ÷ÓÃµÄÊ±ºò£¬Ëü¾Í»áÊÊµ±µ÷ÓÃbroadcastUpdate()°ïÖú·½·¨²¢´«µÝÒ»¸ö²Ù×÷±êÊ¶¡£
-     * ×¢Òâ±¾½ÚÖÐµÄÊý¾ÝÊÇ¸ù¾ÝÀ¶ÑÀÐÄÂÊ²âÁ¿µÄprofile¹æ·¶½âÎöµÄ£º
+     * å½“ä¸€ä¸ªç‰¹å®šçš„çš„å›žè°ƒæ–¹æ³•è¢«è°ƒç”¨çš„æ—¶å€™ï¼Œå®ƒå°±ä¼šé€‚å½“è°ƒç”¨broadcastUpdate()å¸®åŠ©æ–¹æ³•å¹¶ä¼ é€’ä¸€ä¸ªæ“ä½œæ ‡è¯†ã€‚
+     * æ³¨æ„æœ¬èŠ‚ä¸­çš„æ•°æ®æ˜¯æ ¹æ®è“ç‰™å¿ƒçŽ‡æµ‹é‡çš„profileè§„èŒƒè§£æžçš„ï¼š
      * @param action
      */
     private void broadcastUpdate(final String action) {
@@ -129,8 +129,8 @@ public class BluetoothLeService extends Service {
                                  final BluetoothGattCharacteristic characteristic) {
         final Intent intent = new Intent(action);
      
-        // °´ÕÕÐÄÂÊ²âÁ¿µÄprofile½øÐÐµÄÌØ¶¨´¦Àí.
-        // °´ÕÕÃ´Ò»¸öprofile¹æ·¶½øÐÐÊý¾Ý½âÎö.
+        // æŒ‰ç…§å¿ƒçŽ‡æµ‹é‡çš„profileè¿›è¡Œçš„ç‰¹å®šå¤„ç†.
+        // æŒ‰ç…§ä¹ˆä¸€ä¸ªprofileè§„èŒƒè¿›è¡Œæ•°æ®è§£æž.
         if (UUID_HEART_RATE_MEASUREMENT.equals(characteristic.getUuid())) {
             int flag = characteristic.getProperties();
             int format = -1;
@@ -145,7 +145,7 @@ public class BluetoothLeService extends Service {
             Log.d(TAG, String.format("Received heart rate: %d", heartRate));
             intent.putExtra(EXTRA_DATA, String.valueOf(heartRate));
         } else {
-            // Õë¶ÔÆäËûprofiles, ½«Êý¾Ý¸ñÊ½»¯Îª16½øÖÆÊý¾Ý.
+            // é’ˆå¯¹å…¶ä»–profiles, å°†æ•°æ®æ ¼å¼åŒ–ä¸º16è¿›åˆ¶æ•°æ®.
             final byte[] data = characteristic.getValue();
             if (data != null && data.length > 0) {
                 final StringBuilder stringBuilder = new StringBuilder(data.length);
@@ -245,6 +245,21 @@ public class BluetoothLeService extends Service {
         mConnectionState = STATE_CONNECTING;
         return true;
     }
+    
+    /**
+     * Disconnects an existing connection or cancel a pending connection. The disconnection result
+     * is reported asynchronously through the
+     * {@code BluetoothGattCallback#onConnectionStateChange(android.bluetooth.BluetoothGatt, int, int)}
+     * callback.
+     */
+    public void disconnect() {
+        if (mBluetoothAdapter == null || mBluetoothGatt == null) {
+            Log.w(TAG, "BluetoothAdapter not initialized");
+            return;
+        }
+        if(mConnectionState == STATE_CONNECTED)
+        	mBluetoothGatt.disconnect();
+    }  
     /**
      * Request a read on a given {@code BluetoothGattCharacteristic}. The read result is reported
      * asynchronously through the {@code BluetoothGattCallback#onCharacteristicRead(android.bluetooth.BluetoothGatt, android.bluetooth.BluetoothGattCharacteristic, int)}

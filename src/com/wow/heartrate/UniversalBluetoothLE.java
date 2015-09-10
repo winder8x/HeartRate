@@ -10,33 +10,33 @@ import android.content.Intent;
 import android.os.Handler;
 import java.util.ArrayList;
 import java.util.List;
-/** * À¶ÑÀµÄ¹¤¾ßÀà * Created by zsl on 15/5/25. */
+/** * è“ç‰™çš„å·¥å…·ç±» * Created by zsl on 15/5/25. */
 public class UniversalBluetoothLE {
     //UniversalBluetoothLE    
     public static UniversalBluetoothLE universalBluetoothLE;    
     private Context context;    //BluetoothAdapter    
     private BluetoothAdapter mBluetoothAdapter;    //BluetoothManager    
-    private BluetoothManager bluetoothManager;    //´ò¿ªÀ¶ÑÀµÄÇëÇóÂë    
-    public static final int REQUEST_ENABLE_BLUETOOTH = 10010;    //ÊÇ·ñÕıÔÚÉ¨ÃèÀ¶ÑÀÉè±¸    
-    private boolean mScanning;    //ÉèÖÃÉ¨ÃèÊ±³¤    
-    private static final long SCAN_PERIOD = 10000;    //À¶ÑÀÉ¨ÃèµÄ·µ»Ø    
-    BluetoothAdapter.LeScanCallback leScanCallback;    //À¶ÑÀÉè±ğµÄlist    
+    private BluetoothManager bluetoothManager;    //æ‰“å¼€è“ç‰™çš„è¯·æ±‚ç     
+    public static final int REQUEST_ENABLE_BLUETOOTH = 10010;    //æ˜¯å¦æ­£åœ¨æ‰«æè“ç‰™è®¾å¤‡    
+    private boolean mScanning;    //è®¾ç½®æ‰«ææ—¶é•¿    
+    private static final long SCAN_PERIOD = 10000;    //è“ç‰™æ‰«æçš„è¿”å›    
+    BluetoothAdapter.LeScanCallback leScanCallback;    //è“ç‰™è®¾åˆ«çš„list    
     List<BluetoothDevice>bluetoothDeviceList = new ArrayList<BluetoothDevice>();    
     Handler mHandler = new Handler();    
     LeScanListenter leScanListenter;    
     private UniversalBluetoothLE(Context context) {
-            this.context = context;        //µÃµ½BluetoothManager        
-            this.bluetoothManager = (BluetoothManager) context.getSystemService(Context.BLUETOOTH_SERVICE);        //µÃµ½BluetoothAdapter        
-            this.mBluetoothAdapter = bluetoothManager.getAdapter();        //À¶ÑÀËÑË÷µÄ»Øµ÷        
+            this.context = context;        //å¾—åˆ°BluetoothManager        
+            this.bluetoothManager = (BluetoothManager) context.getSystemService(Context.BLUETOOTH_SERVICE);        //å¾—åˆ°BluetoothAdapter        
+            this.mBluetoothAdapter = bluetoothManager.getAdapter();        //è“ç‰™æœç´¢çš„å›è°ƒ        
             leScanCallback = new BluetoothAdapter.LeScanCallback() {
             	@Override
             	public void onLeScan(BluetoothDevice device, int rssi, byte[] scanRecord) {
-            		bluetoothDeviceList.add(device); //·µ»ØËùÓĞÁĞ±í                
+            		bluetoothDeviceList.add(device); //è¿”å›æ‰€æœ‰åˆ—è¡¨                
             		leScanListenter.leScanCallBack(bluetoothDeviceList);            
             	}
             };
     }    
-    /**     * »ñµÃµ½UniversalBluetoothLE¶ÔÏó     *     * @param context     * @return     */
+    /**     * è·å¾—åˆ°UniversalBluetoothLEå¯¹è±¡     *     * @param context     * @return     */
     public static UniversalBluetoothLE inistance(Context context) {
     	if (universalBluetoothLE == null) {
     		universalBluetoothLE = new UniversalBluetoothLE(context);   
@@ -44,18 +44,18 @@ public class UniversalBluetoothLE {
     	return universalBluetoothLE;   
     }
     /**
-     * ¼ì²éÀ¶ÑÀÊÇ·ñ´ò¿ª²¢ÇÒÆô¶¯´ò¿ªÀ¶ÑÀµÄ·½·¨    
+     * æ£€æŸ¥è“ç‰™æ˜¯å¦æ‰“å¼€å¹¶ä¸”å¯åŠ¨æ‰“å¼€è“ç‰™çš„æ–¹æ³•    
      */    
     public void openBbletooth() {
-    	//ÅĞ¶ÏÀ¶ÑÀÊÇ·ñ¿ªÆô 
+    	//åˆ¤æ–­è“ç‰™æ˜¯å¦å¼€å¯ 
     	if (mBluetoothAdapter == null || !mBluetoothAdapter.isEnabled()) {  
-    		//´ò¿ªÀ¶ÑÀ 
+    		//æ‰“å¼€è“ç‰™ 
     		Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE); 
     		context.startActivity(enableIntent);        
     	}    
     }   
     /**     
-     * ¿ªÊ¼£¨true£©»ò½áÊø£¨false£©À¶ÑÀÉ¨Ãè     
+     * å¼€å§‹ï¼ˆtrueï¼‰æˆ–ç»“æŸï¼ˆfalseï¼‰è“ç‰™æ‰«æ     
  	 * @param enable     
  	 */    
     private void scanLeDevice(final boolean enable) {
@@ -74,8 +74,8 @@ public class UniversalBluetoothLE {
     		mBluetoothAdapter.stopLeScan(leScanCallback);
     		}    }  
     /**     
-     *  ¿ªÊ¼ËÑË÷À¶ÑÀÉè±¸         
-     *  @param leScanListenter ËÑË÷À¶ÑÀÉè±¸µÄ»Øµ÷£¨·µ»ØÉè±¸ÁĞ±í£©     
+     *  å¼€å§‹æœç´¢è“ç‰™è®¾å¤‡         
+     *  @param leScanListenter æœç´¢è“ç‰™è®¾å¤‡çš„å›è°ƒï¼ˆè¿”å›è®¾å¤‡åˆ—è¡¨ï¼‰     
      */   
      public void startScanLeDevice(final LeScanListenter leScanListenter) {
     	 bluetoothDeviceList.clear();
@@ -83,7 +83,7 @@ public class UniversalBluetoothLE {
     	 scanLeDevice(true);    
     	 }    
      /**     
-      * Í£Ö¹ËÑË÷Éè±¸    
+      * åœæ­¢æœç´¢è®¾å¤‡    
       */
      public void stopScanLeDevice() { 
     	 if (leScanCallback == null)  
@@ -91,16 +91,16 @@ public class UniversalBluetoothLE {
     	 scanLeDevice(false);
     }   
      /**     
-      * ËÑË÷À¶ÑÀµÄ»Øµ÷   
+      * æœç´¢è“ç‰™çš„å›è°ƒ   
       */ 
      public interface LeScanListenter {
     	 void leScanCallBack(List<BluetoothDevice>bluetoothDeviceList);
     } 
      /**
-      * µÃµ½BluetoothGatt
-      * @param device Éè±¸     
-      * @param autoConnect ÊÇ·ñ×Ô¶¯Á´½Ó    
-      * @param bluetoothGattCallback »Øµ÷     
+      * å¾—åˆ°BluetoothGatt
+      * @param device è®¾å¤‡     
+      * @param autoConnect æ˜¯å¦è‡ªåŠ¨é“¾æ¥    
+      * @param bluetoothGattCallback å›è°ƒ     
       */  
      public BluetoothGatt getConnectGatt(BluetoothDevice device,boolean autoConnect,
     		 BluetoothGattCallback bluetoothGattCallback) {
@@ -110,15 +110,15 @@ public class UniversalBluetoothLE {
 }
      
     
-//    //³õÊ¼»¯
-//    	 //ÔÚonCreateÖĞ
-//    	 //³õÊ¼»¯UniversalBluetoothLE
+//    //åˆå§‹åŒ–
+//    	 //åœ¨onCreateä¸­
+//    	 //åˆå§‹åŒ–UniversalBluetoothLE
 //    	 
 //    	 universalBluetoothLE = UniversalBluetoothLE.inistance(MainActivity.class);
-// 	//    ¼ì²âÊÇ·ñ´ò¿ªÀ¶ÑÀ²¢ÇÒÇëÇóÏµÍ³´ò¿ªÀ¶ÑÀ
-// 	//¼ì²âÊÇ·ñ´ò¿ªÀ¶ÑÀ²¢ÇÒÇëÇóÏµÍ³´ò¿ªÀ¶ÑÀ
+// 	//    æ£€æµ‹æ˜¯å¦æ‰“å¼€è“ç‰™å¹¶ä¸”è¯·æ±‚ç³»ç»Ÿæ‰“å¼€è“ç‰™
+// 	//æ£€æµ‹æ˜¯å¦æ‰“å¼€è“ç‰™å¹¶ä¸”è¯·æ±‚ç³»ç»Ÿæ‰“å¼€è“ç‰™
 //    universalBluetoothLE.openBbletooth();
-//   // Á´½ÓÉè±¸
+//   // é“¾æ¥è®¾å¤‡
 //   mBluetoothGatt = universalBluetoothLE.getConnectGatt(device,true,mGattCallback);
 //   mBluetoothGatt.connect();
 
