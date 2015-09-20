@@ -28,23 +28,27 @@
             android:id="@+id/tv_listBluetooth"
             android:text="00"
             android:gravity="center"
-            android:textSize="92px"
+            android:textSize="80px"
             android:background="#ffcc00"
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
             android:layout_weight="1"
             />
-          <TextView
-            android:text="00"
-            android:gravity="center"
-            android:textSize="24px"
-            android:background="#0066ff"
-            android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
-            android:layout_weight="1"
-            android:clickable="true"
-            android:onClick="tv_listTestRecordClick"
+        
+          <ListView
+            android:id="@+id/lv_listRecord"
+            android:background="#386117"
+            android:textSize="18px"
+            android:textColor="#FFFFFF"
+            android:layout_width="0px"  
+            android:layout_weight="1.5"
+        	android:layout_height="wrap_content"  
+        	android:fastScrollEnabled="true"  
+            
             />   
+            <!-- 
+            android:clickable="true"
+            android:onClick="tv_listTestRecordClick" -->
     </LinearLayout>
     <!-- 
         android:layout_height="wrap_content"

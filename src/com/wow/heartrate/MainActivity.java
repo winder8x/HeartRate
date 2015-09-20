@@ -36,12 +36,19 @@ import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemLongClickListener;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
 
@@ -123,13 +130,72 @@ public class MainActivity extends Activity {
         }
         //db init
         DatabaseHelper database = new DatabaseHelper(this);
-        
         db = database.getReadableDatabase();
         dbUtils = new DBUtils(db);
         
+        List<String> recordData = dbUtils.query();
+        //list record 
+        ListView lvList =(ListView)findViewById(R.id.lv_listRecord);
+        ListViewArrayAdapter<String> adapter = new ListViewArrayAdapter<String>(this, 
+        		android.R.layout.simple_expandable_list_item_1,
+        		recordData);
+        
+        lvList.setAdapter(adapter);
+//        Drawable drawable= new ColorDrawable(0xFF053525);
+//        lvList.setSelector(drawable);  
+        lvList.setCacheColorHint(0);
+        
+        lvList.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				
+				ListView p = (ListView)parent;
+				ListViewArrayAdapter<?> adapter = (ListViewArrayAdapter<?>)p.getAdapter();
+				String text = (String)adapter.getItem(position);
+				chartData(text);
+				
+				adapter.setPosition(position);
+				adapter.notifyDataSetChanged();
+				
+			}
+		});
+        
+        lvList.setOnItemLongClickListener(new OnItemLongClickListener(){
+
+			@Override
+			public boolean onItemLongClick(AdapterView<?> parent, View view,
+					int position, long id) {
+
+				ListView p = (ListView)parent;
+				
+				ListViewArrayAdapter adapter = (ListViewArrayAdapter)p.getAdapter();
+				String text = (String)adapter.getItem(position);
+
+				if(position == adapter.pos){
+					//adapter.clear();
+					//adapter.addAll(recordData);
+					dbUtils.delete(text);
+					List<String> recordData = dbUtils.query();
+					adapter.clear();
+					adapter.addAll(recordData);
+					adapter.pos = -1;
+					adapter.notifyDataSetChanged();
+				}
+				
+				
+				
+				
+				return true;
+				
+			}
+        	
+        });
         
         
     }
+    
+    
     
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -214,18 +280,7 @@ public class MainActivity extends Activity {
     }
     
 
-    
-    /**
-     * 右边按钮 处理历史测试记录
-     * @param view
-     */
-    public void tv_listTestRecordClick(View view){
-    	List<String> record = dbUtils.query();
-    	if(record.size() > 0){
-    		TextView tvList =(TextView)view;
-    		tvList.setText(record.get(0));
-    	}
-    }
+  
     /**
      * 绑定事件，连接并处理蓝牙数据
      * @param view
@@ -254,13 +309,51 @@ public class MainActivity extends Activity {
             	tvList.setText("start");
             	
             	chart(true);
-            	testDate = null;
+            	if(this.heartRateData.size() < 1){
+                	testDate = null;
+            		return;
+            	}
+            	//提示是否保存
+            	Dialog alertDialog = new AlertDialog.Builder(this).   
+    	                setTitle("Info").   
+    	                setMessage("是否保存本次测试数据？").   
+    	                setIcon(R.drawable.ic_launcher).    	                
+    	                setPositiveButton("OK", new DialogInterface.OnClickListener() {   
+    	                    @Override   
+    	                    public void onClick(DialogInterface dialog, int which) {   
+    	                        // TODO Auto-generated method stub
+    	                    	ListView lvList =(ListView)findViewById(R.id.lv_listRecord);
+    	                    	ListViewArrayAdapter adapter = (ListViewArrayAdapter)lvList.getAdapter();
+    	        				
+    	        				List<String> recordData = dbUtils.query();
+    	        				adapter.clear();
+    	        				adapter.addAll(recordData);
+    	        				adapter.pos = -1;
+    	        				adapter.notifyDataSetChanged();
+    	                    	testDate = null;
+    	                    }   
+    	                }).    	                
+    	                setNegativeButton("No", new DialogInterface.OnClickListener() {   
+    	                    @Override   
+    	                    public void onClick(DialogInterface dialog, int which) {   
+    	                    	dbUtils.delete(testDate);
+    	                    	testDate = null;
+    	                    	
+    	                    }   
+    	                }).
+    	                create();
+            	
+    	        alertDialog.show();  
+            	
             	
 			}else{//连接蓝牙
 	            boolean result = mBluetoothLeService.connect(mDeviceAddress);
 	            Log.d(TAG, "Connect request result=" + result);
             	this.heartRateData.clear();
+            	testDate = null;
 	            if(result){
+	            	
+	    	        
 	            	tvList.setText("Stop");
 	            	if(testDate == null)
 	            		testDate = DBUtils.getDatetime();
@@ -270,6 +363,20 @@ public class MainActivity extends Activity {
         }
 
     	
+    }
+    /**
+     * 用指定的记录数据画图
+     * @param testData
+     */
+    private void chartData(String testData){
+    	List<HeartRateEntity> data =  this.dbUtils.query(testData);
+    	this.heartRateData.clear();
+    	if(data != null){
+    		for(HeartRateEntity d : data){
+    			heartRateData.add(d.getRate() + "");
+    		}
+    		chart(true);
+    	}
     }
     /**
      * 图形处理
@@ -400,7 +507,7 @@ public class MainActivity extends Activity {
 			TextView tvList =(TextView  )findViewById(R.id.tv_listBluetooth);
 			tvList.setText(msg); 
 			
-		}
+		} 
  	};
     
  	//更新链接状态

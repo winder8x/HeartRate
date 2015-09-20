@@ -42,7 +42,7 @@ public class DBUtils {
 	 * @return
 	 */
 	public List<String> query(){
-		String sql = "select distinct test_date from u_heartreate ";
+		String sql = "select distinct test_date from u_heartreate order by test_date desc limit 10";
 		String[] selectionArgs = new String[0];
 		Cursor c = db.rawQuery(sql, selectionArgs);
 		List<String> ret = new ArrayList<String>();
